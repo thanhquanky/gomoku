@@ -39,6 +39,9 @@ var Game;
             this.cellWidth = 20;
             this.board = new Game.Board(canvas, this.cellWidth);
             this.boardMap = [];
+        }
+        Gomuku.prototype.initialize = function (playFirst) {
+            this.board.clear();
             for (var i = 0; i < this.board.nRows; i++) {
                 var arr = [];
                 for (var j = 0; j < this.board.nCols; j++) {
@@ -46,10 +49,16 @@ var Game;
                 }
                 this.boardMap.push(arr);
             }
-            this.gameState = 2 /* PLAY */;
-        }
+            if (playFirst) {
+                this.gameState = 2 /* PLAY */;
+            }
+            else {
+                this.gameState = 1 /* WAIT */;
+            }
+        };
         Gomuku.prototype.create = function () {
             var _this = this;
+            this.initialize(true);
             this.gameRef = this.fbRef.push({
                 user: this.user
             });
@@ -67,6 +76,8 @@ var Game;
         };
         Gomuku.prototype.join = function (gameId) {
             this.isX = false;
+            this.initialize(false);
+            this.gameState = 1 /* WAIT */;
             this.gameRef = new Firebase(fbUrl + "/" + gameId);
             this.movesRef = new Firebase(fbUrl + "/" + gameId + "/moves");
             this.gameRef.update({
@@ -110,10 +121,14 @@ var Game;
                 console.log("Checked " + k + " steps");
                 if (count >= 4) {
                     if (this.isX && target > 0 || !this.isX && target < 0) {
-                        return 1;
+                        toastr.options.showDuration = 3000;
+                        toastr.success("You've won", "Gomoku");
+                        this.initialize(true);
                     }
                     else {
-                        return -1;
+                        toastr.options.showDuration = 3000;
+                        toastr.error("You've lost.", "Gomoku");
+                        this.initialize(false);
                     }
                 }
             }
@@ -140,19 +155,6 @@ var Game;
                         this.board.drawO(row, col);
                         this.boardMap[row][col] = -1;
                     }
-                    var result = this.checkBoardMap(row, col);
-                    switch (result) {
-                        case 1:
-                            this.board.clear();
-                            toastr.options.showDuration = 3000;
-                            toastr.success("You've won", "Gomoku");
-                            break;
-                        case -1:
-                            this.board.clear();
-                            toastr.options.showDuration = 3000;
-                            toastr.error("You've lost.", "Gomoku");
-                            break;
-                    }
                     this.movesRef.push({
                         player: this.user,
                         position: {
@@ -161,6 +163,7 @@ var Game;
                         },
                         playAt: Date.now()
                     });
+                    this.checkBoardMap(row, col);
                 }
             }
             else {
@@ -186,6 +189,7 @@ var Game;
                             that.board.drawX(newMove.position.row, newMove.position.col);
                             that.boardMap[newMove.position.row][newMove.position.col] = 1;
                         }
+                        that.checkBoardMap(newMove.position.row, newMove.position.col);
                     }
                 }
             });

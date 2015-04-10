@@ -40,6 +40,10 @@ module Game {
             this.cellWidth = 20;
             this.board = new Board(canvas, this.cellWidth);
             this.boardMap = [];
+        }
+
+        initialize(playFirst?: boolean) {
+            this.board.clear();
             for (var i=0; i<this.board.nRows; i++) {
                 var arr : number[] = [];
                 for (var j=0; j<this.board.nCols; j++) {
@@ -47,10 +51,17 @@ module Game {
                 }
                 this.boardMap.push(arr);
             }
-            this.gameState = State.PLAY;
+
+            if (playFirst) {
+                this.gameState = State.PLAY;
+            }
+            else {
+                this.gameState = State.WAIT;
+            }
         }
 
         create() : string {
+            this.initialize(true);
             this.gameRef = this.fbRef.push({
                 user: this.user
             });
@@ -72,6 +83,8 @@ module Game {
 
         join(gameId: string) : void {
             this.isX = false;
+            this.initialize(false);
+            this.gameState = State.WAIT;
             this.gameRef = new Firebase(fbUrl + "/" + gameId);
             this.movesRef = new Firebase(fbUrl + "/" + gameId + "/moves");
             this.gameRef.update({
@@ -122,10 +135,14 @@ module Game {
 
                 if (count >= 4) {
                     if (this.isX && target > 0 || !this.isX && target < 0) {
-                        return 1;
+                        toastr.options.showDuration = 3000;
+                        toastr.success("You've won", "Gomoku");
+                        this.initialize(true);
                     }
                     else {
-                        return -1;
+                        toastr.options.showDuration = 3000;
+                        toastr.error("You've lost.", "Gomoku");
+                        this.initialize(false);
                     }
                 }
             }
@@ -153,20 +170,6 @@ module Game {
                         this.board.drawO(row, col);
                         this.boardMap[row][col] = -1;
                     }
-                    var result = this.checkBoardMap(row, col);
-
-                    switch (result) {
-                        case 1:
-                            this.board.clear();
-                            toastr.options.showDuration = 3000;
-                            toastr.success("You've won", "Gomoku");
-                            break;
-                        case -1:
-                            this.board.clear();
-                            toastr.options.showDuration = 3000;
-                            toastr.error("You've lost.", "Gomoku");
-                            break;
-                    }
 
                     this.movesRef.push({
                         player: this.user,
@@ -176,6 +179,8 @@ module Game {
                         },
                         playAt: Date.now()
                     });
+
+                    this.checkBoardMap(row, col);
                 }
             }
             else {
@@ -202,6 +207,7 @@ module Game {
                             that.board.drawX(newMove.position.row, newMove.position.col);
                             that.boardMap[newMove.position.row][newMove.position.col] = 1;
                         }
+                        that.checkBoardMap(newMove.position.row, newMove.position.col);
                     }
                 }
             });

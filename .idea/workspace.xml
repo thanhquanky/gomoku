@@ -2,6 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="6f9bd4d6-b2c4-4211-b7ce-8fc8ecd1a214" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/scripts/gomuku.js.map" afterPath="$PROJECT_DIR$/scripts/gomuku.js.map" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/scripts/gomuku.js" afterPath="$PROJECT_DIR$/scripts/gomuku.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/scripts/gomuku.ts" afterPath="$PROJECT_DIR$/scripts/gomuku.ts" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
@@ -27,8 +29,8 @@
       <file leaf-file-name="index.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/index.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-5.8846154">
-              <caret line="9" column="70" selection-start-line="9" selection-start-column="70" selection-end-line="9" selection-end-column="70" />
+            <state vertical-scroll-proportion="3.9230769">
+              <caret line="6" column="57" selection-start-line="6" selection-start-column="57" selection-end-line="6" selection-end-column="57" />
               <folding />
             </state>
           </provider>
@@ -71,10 +73,10 @@
         <entry file="file://$PROJECT_DIR$/scripts/gomuku.js">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="194" column="3" selection-start-line="194" selection-start-column="3" selection-end-line="194" selection-end-column="3" />
+              <caret line="200" column="3" selection-start-line="200" selection-start-column="3" selection-end-line="200" selection-end-column="3" />
               <folding>
                 <element signature="n#!!doc" expanded="true" />
-                <marker date="1428630978034" expanded="true" signature="89:97" placeholder="/** Created by thanhquanky on 4/8/15. ...*/" />
+                <marker date="1428633351624" expanded="true" signature="89:97" placeholder="/** Created by thanhquanky on 4/8/15. ...*/" />
               </folding>
             </state>
           </provider>
@@ -83,8 +85,8 @@
       <file leaf-file-name="gomuku.ts" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/scripts/gomuku.ts">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.87628865">
-              <caret line="122" column="30" selection-start-line="122" selection-start-column="30" selection-end-line="122" selection-end-column="30" />
+            <state vertical-scroll-proportion="-2.9725087">
+              <caret line="85" column="36" selection-start-line="85" selection-start-column="36" selection-end-line="85" selection-end-column="36" />
               <folding>
                 <element signature="n#!!doc" expanded="true" />
                 <element signature="e#143#187#0" expanded="false" />
@@ -485,7 +487,7 @@
           <caret line="138" column="3" selection-start-line="138" selection-start-column="3" selection-end-line="138" selection-end-column="3" />
           <folding>
             <element signature="n#!!doc" expanded="true" />
-            <marker date="1428630978034" expanded="true" signature="89:97" placeholder="/** Created by thanhquanky on 4/8/15. ...*/" />
+            <marker date="1428633351624" expanded="true" signature="89:97" placeholder="/** Created by thanhquanky on 4/8/15. ...*/" />
           </folding>
         </state>
       </provider>
@@ -568,7 +570,7 @@
           <caret line="132" column="3" selection-start-line="132" selection-start-column="3" selection-end-line="132" selection-end-column="3" />
           <folding>
             <element signature="n#!!doc" expanded="true" />
-            <marker date="1428630978034" expanded="true" signature="89:97" placeholder="/** Created by thanhquanky on 4/8/15. ...*/" />
+            <marker date="1428633351624" expanded="true" signature="89:97" placeholder="/** Created by thanhquanky on 4/8/15. ...*/" />
           </folding>
         </state>
       </provider>
@@ -648,7 +650,7 @@
           <caret line="35" column="5" selection-start-line="35" selection-start-column="5" selection-end-line="35" selection-end-column="5" />
           <folding>
             <element signature="n#!!doc" expanded="true" />
-            <marker date="1428630978034" expanded="true" signature="89:97" placeholder="/** Created by thanhquanky on 4/8/15. ...*/" />
+            <marker date="1428633351624" expanded="true" signature="89:97" placeholder="/** Created by thanhquanky on 4/8/15. ...*/" />
           </folding>
         </state>
       </provider>
@@ -734,10 +736,10 @@
     <entry file="file://$PROJECT_DIR$/scripts/gomuku.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="194" column="3" selection-start-line="194" selection-start-column="3" selection-end-line="194" selection-end-column="3" />
+          <caret line="200" column="3" selection-start-line="200" selection-start-column="3" selection-end-line="200" selection-end-column="3" />
           <folding>
             <element signature="n#!!doc" expanded="true" />
-            <marker date="1428630978034" expanded="true" signature="89:97" placeholder="/** Created by thanhquanky on 4/8/15. ...*/" />
+            <marker date="1428633351624" expanded="true" signature="89:97" placeholder="/** Created by thanhquanky on 4/8/15. ...*/" />
           </folding>
         </state>
       </provider>
@@ -746,22 +748,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-7.1923075">
           <caret line="11" column="0" selection-start-line="11" selection-start-column="0" selection-end-line="11" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/index.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-5.8846154">
-          <caret line="9" column="70" selection-start-line="9" selection-start-column="70" selection-end-line="9" selection-end-column="70" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/typings/toastr/toastr.d.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="5" column="0" selection-start-line="5" selection-start-column="0" selection-end-line="5" selection-end-column="0" />
           <folding />
         </state>
       </provider>
@@ -776,6 +762,14 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="3.9230769">
+          <caret line="6" column="57" selection-start-line="6" selection-start-column="57" selection-end-line="6" selection-end-column="57" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/scripts/board.ts">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -786,10 +780,18 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/typings/toastr/toastr.d.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="5" column="0" selection-start-line="5" selection-start-column="0" selection-end-line="5" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/scripts/gomuku.ts">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.87628865">
-          <caret line="122" column="30" selection-start-line="122" selection-start-column="30" selection-end-line="122" selection-end-column="30" />
+        <state vertical-scroll-proportion="-2.9725087">
+          <caret line="85" column="36" selection-start-line="85" selection-start-column="36" selection-end-line="85" selection-end-column="36" />
           <folding>
             <element signature="n#!!doc" expanded="true" />
             <element signature="e#143#187#0" expanded="false" />
