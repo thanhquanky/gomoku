@@ -1,8 +1,10 @@
+///<reference path="board.ts"/>
+///<reference path="..\typings\firebase\firebase.d.ts"/>
+///<reference path="..\typings\toastr\toastr.d.ts"/>
 /**
  * Created by thanhquanky on 4/8/15.
  */
 'use strict';
-/// <reference path="../typings/firebase/firebase.d.ts" />
 var Game;
 (function (Game) {
     var State;
@@ -14,33 +16,51 @@ var Game;
         State[State["LOSE"] = 4] = "LOSE";
     })(State || (State = {}));
     ;
+    var Mode;
+    (function (Mode) {
+        Mode[Mode["OFFLINE"] = 0] = "OFFLINE";
+        Mode[Mode["ONLINE"] = 1] = "ONLINE";
+    })(Mode || (Mode = {}));
+    ;
     var fbUrl = "https://gomoku.firebaseio.com/game";
     var fbRef;
     var Gomuku = (function () {
-        function Gomuku(user) {
+        function Gomuku(user, mountTo) {
             var _this = this;
             this.fbRef = new Firebase(fbUrl);
             this.user = user;
-            this.canvas = document.querySelector('#canvas');
-            this.canvas.id = "gameCanvas";
-            this.canvas.width = 801;
-            this.canvas.height = 801;
-            this.context = this.canvas.getContext("2d");
-            this.cellHeight = 20;
-            this.cellWidth = 20;
-            this.nRows = this.canvas.height / this.cellHeight;
-            this.nCols = this.canvas.width / this.cellWidth;
-            this.canvas.addEventListener('mousedown', function (e) {
+            var canvas = document.createElement("canvas");
+            canvas.width = 801;
+            canvas.height = 801;
+            canvas.addEventListener('mousedown', function (e) {
                 _this.checkCell(e);
             });
+            mountTo.appendChild(canvas);
+            this.cellWidth = 20;
+            this.board = new Game.Board(canvas, this.cellWidth);
+            this.boardMap = [];
+            for (var i = 0; i < this.board.nRows; i++) {
+                var arr = [];
+                for (var j = 0; j < this.board.nCols; j++) {
+                    arr.push(0);
+                }
+                this.boardMap.push(arr);
+            }
             this.gameState = 2 /* PLAY */;
         }
         Gomuku.prototype.create = function () {
-            this.gameRef = this.fbRef.push();
+            var _this = this;
+            this.gameRef = this.fbRef.push({
+                user: this.user
+            });
             var gameId = this.gameRef.key();
             this.isX = true;
-            this.gameRef.set({
-                user: this.user
+            this.gameRef.on('value', function (gameSnapshot) {
+                var game = gameSnapshot.val();
+                if (game.guess != null) {
+                    toastr.info(game.guess + ' has joined');
+                    _this.gameRef.off('value');
+                }
             });
             this.movesRef = new Firebase(fbUrl + "/" + gameId + "/moves");
             return gameId;
@@ -53,82 +73,120 @@ var Game;
                 guess: this.user
             });
         };
-        Gomuku.prototype.drawBoard = function () {
-            this.context.beginPath();
-            for (var i = 0; i < this.nRows; i++) {
-                this.context.moveTo(0, this.cellHeight * i);
-                this.context.lineTo(this.canvas.width, this.cellHeight * i);
+        Gomuku.prototype.checkBoardMap = function (row, col) {
+            var dRows = [1, 0, 1, 1];
+            var dCols = [0, -1, 1, -1];
+            for (var i = 0; i < dRows.length; i++) {
+                var count = 0;
+                var nextRow = row;
+                var nextCol = col;
+                var target = this.boardMap[row][col];
+                var k = 0;
+                while (nextRow >= 0 && nextCol >= 0 && nextRow < this.board.nRows && nextCol < this.board.nCols) {
+                    nextRow += dRows[i];
+                    nextCol += dCols[i];
+                    k++;
+                    if (this.boardMap[nextRow][nextCol] == target) {
+                        count++;
+                    }
+                    else {
+                        break;
+                    }
+                }
+                // check other direction
+                nextRow = row;
+                nextCol = col;
+                while (nextRow >= 0 && nextCol >= 0 && nextRow < this.board.nRows && nextCol < this.board.nCols) {
+                    nextRow += dRows[i] * -1;
+                    nextCol += dCols[i] * -1;
+                    k++;
+                    if (this.boardMap[nextRow][nextCol] == target) {
+                        count++;
+                    }
+                    else {
+                        break;
+                    }
+                }
+                console.log("Checked " + k + " steps");
+                if (count >= 5) {
+                    if (this.isX && target > 0 || !this.isX && target < 0) {
+                        return 1;
+                    }
+                    else {
+                        return -1;
+                    }
+                }
             }
-            for (var j = 0; j < this.nCols; j++) {
-                this.context.moveTo(this.cellWidth * j, 0);
-                this.context.lineTo(this.cellWidth * j, this.canvas.height);
-            }
-            this.context.closePath();
-            this.context.stroke();
-        };
-        Gomuku.prototype.drawX = function (row, col) {
-            this.context.beginPath();
-            this.context.strokeStyle = '#00BB12';
-            this.context.lineWidth = 2;
-            var offset = this.cellWidth / 6;
-            this.context.moveTo(col * this.cellWidth + offset, row * this.cellHeight + offset);
-            this.context.lineTo((col + 1) * this.cellWidth - offset, (row + 1) * this.cellHeight - offset);
-            this.context.stroke();
-            this.context.moveTo(col * this.cellWidth + offset, (row + 1) * this.cellHeight - offset);
-            this.context.lineTo((col + 1) * this.cellWidth - offset, row * this.cellHeight + offset);
-            this.context.stroke();
-            this.context.closePath();
-        };
-        Gomuku.prototype.drawO = function (row, col) {
-            this.context.beginPath();
-            this.context.strokeStyle = '#BB0012';
-            this.context.lineWidth = 2;
-            var radius = this.cellHeight / 3;
-            var centerRow = (row * this.cellHeight) + this.cellHeight / 2;
-            var centerCol = (col * this.cellWidth) + this.cellWidth / 2;
-            this.context.arc(centerCol, centerRow, radius, 0, Math.PI * 2);
-            this.context.stroke();
-            this.context.closePath();
+            return 0;
         };
         Gomuku.prototype.checkCell = function (mouseEvent) {
             if (this.gameState == 2 /* PLAY */) {
                 this.gameState = 1 /* WAIT */;
-                var x = mouseEvent.clientX - this.canvas.offsetLeft;
-                var y = mouseEvent.clientY - this.canvas.offsetTop;
+                var canvas = mouseEvent.currentTarget;
+                var x = mouseEvent.clientX - canvas.offsetLeft;
+                var y = mouseEvent.clientY - canvas.offsetTop;
                 var col = Math.floor(x / this.cellWidth);
-                var row = Math.floor(y / this.cellHeight);
-                if (this.isX) {
-                    this.drawX(row, col);
+                var row = Math.floor(y / this.cellWidth);
+                if (this.boardMap[row][col] != 0) {
+                    toastr.error("Invalid move");
+                    this.gameState = 2 /* PLAY */;
                 }
                 else {
-                    this.drawO(row, col);
+                    if (this.isX) {
+                        this.board.drawX(row, col);
+                        this.boardMap[row][col] = 1;
+                    }
+                    else {
+                        this.board.drawO(row, col);
+                        this.boardMap[row][col] = -1;
+                    }
+                    var result = this.checkBoardMap(row, col);
+                    switch (result) {
+                        case 1:
+                            this.board.clear();
+                            toastr.options.showDuration = 3000;
+                            toastr.success("You've won", "Gomoku");
+                            break;
+                        case -1:
+                            this.board.clear();
+                            toastr.options.showDuration = 3000;
+                            toastr.error("You've lost.", "Gomoku");
+                            break;
+                    }
+                    this.movesRef.push({
+                        player: this.user,
+                        position: {
+                            row: row,
+                            col: col
+                        },
+                        playAt: Date.now()
+                    });
                 }
-                this.movesRef.push({
-                    player: this.user,
-                    position: {
-                        row: row,
-                        col: col
-                    },
-                    playAt: Date.now()
-                });
             }
             else {
                 alert("Wait for other player to make move");
             }
         };
         Gomuku.prototype.start = function () {
-            this.drawBoard();
+            this.board.clear();
         };
         Gomuku.prototype.gameloop = function () {
+            var _this = this;
             var that = this;
             this.movesRef.on('child_added', function (moveSnapShot) {
                 var newMove = moveSnapShot.val();
-                if (newMove.player !== that.user) {
-                    that.gameState = 2 /* PLAY */;
-                    if (that.isX)
-                        that.drawO(newMove.position.row, newMove.position.col);
-                    else
-                        that.drawX(newMove.position.row, newMove.position.col);
+                if (_this.gameState != 3 /* WIN */ && _this.gameState != 4 /* LOSE */) {
+                    if (newMove.player !== that.user) {
+                        that.gameState = 2 /* PLAY */;
+                        if (that.isX) {
+                            that.board.drawO(newMove.position.row, newMove.position.col);
+                            that.boardMap[newMove.position.row][newMove.position.col] = -1;
+                        }
+                        else {
+                            that.board.drawX(newMove.position.row, newMove.position.col);
+                            that.boardMap[newMove.position.row][newMove.position.col] = 1;
+                        }
+                    }
                 }
             });
         };

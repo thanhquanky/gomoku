@@ -3,14 +3,16 @@
  */
 /// <reference path="./gomuku.ts" />
 var name = prompt("Enter your name");
-var gomuku = new Game.Gomuku(name);
+var container = document.querySelector("#gameContainer ");
+var gomuku = new Game.Gomuku(name, container);
 gomuku.start();
-$('#createBtn').click(function () {
+document.querySelector('#createBtn').addEventListener('click', function (e) {
     var gameId = gomuku.create();
-    $('#gameId').html(gameId);
+    var gameIdSpan = document.querySelector('#gameId');
+    gameIdSpan.textContent = gameId;
     gomuku.gameloop();
 });
-$('#joinBtn').click(function () {
+document.querySelector('#joinBtn').addEventListener('click', function (e) {
     var gameId = prompt("Enter game id");
     gomuku.join(gameId);
     gomuku.gameloop();
