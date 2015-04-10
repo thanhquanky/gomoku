@@ -120,7 +120,7 @@ module Game {
 
                 console.log("Checked " + k + " steps");
 
-                if (count >= 5) {
+                if (count >= 4) {
                     if (this.isX && target > 0 || !this.isX && target < 0) {
                         return 1;
                     }
